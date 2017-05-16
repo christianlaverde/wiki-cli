@@ -5,6 +5,7 @@ import requests
 
 API_ENDPOINT = 'https://en.wikipedia.org/w/api.php'
 
+
 def get_wiki_summary(title):
     params = {
         'action': 'query',
@@ -26,6 +27,7 @@ def get_wiki_summary(title):
         page_title = r['title']
         summary = r['extract']
         print(summary)
+
 
 def get_disambiguation_titles(title):
     params = {
