@@ -31,7 +31,7 @@ def get_disambiguation_titles(title):
     params = {
         'action': 'query',
         'format': 'json',
-        'titles': '{}_(disambiguation)'.format(title),
+        'titles': '{} (disambiguation)'.format(title),
         'prop': 'links'
     }
     r = requests.get(API_ENDPOINT, params=params)
