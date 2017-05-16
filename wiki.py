@@ -52,7 +52,6 @@ def main():
     parser.add_argument('title', help='Title of page to search for')
     parser.add_argument('-l', '--list-disambiguations', action='store_true',
                         help='List all disambiguations for the given title')
-    # parser.add_argument('-d', '--disambiguation', type=int, help='Output specified disambiguation')
     args = parser.parse_args()
     title = args.title.strip()
 
