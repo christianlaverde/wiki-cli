@@ -55,7 +55,7 @@ def main():
     parser.add_argument('-l', '--list-disambiguations', action='store_true',
                         help='List all disambiguations for the given title')
     args = parser.parse_args()
-    title = args.title.strip()
+    title = args.title.strip().title()
 
     if args.list_disambiguations:
         get_disambiguation_titles(title)
