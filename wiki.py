@@ -34,9 +34,7 @@ def main():
     args = parser.parse_args()
 
     get_wiki_summary(args.title)
-    
-    
-    
+
 
 if __name__ == '__main__':
     main()
