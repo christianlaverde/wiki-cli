@@ -3,9 +3,9 @@
 import argparse
 import requests
 
+API_ENDPOINT = 'https://en.wikipedia.org/w/api.php'
 
 def get_wiki_summary(title):
-    API_ENDPOINT = 'https://en.wikipedia.org/w/api.php'
     params = {
         'action': 'query',
         'format': 'json',
@@ -25,16 +25,41 @@ def get_wiki_summary(title):
         r = r[pageid]
         page_title = r['title']
         summary = r['extract']
-        print(page_title)
         print(summary)
+
+def get_disambiguation_titles(title):
+    params = {
+        'action': 'query',
+        'format': 'json',
+        'titles': '{}_(disambiguation)'.format(title),
+        'prop': 'links'
+    }
+    r = requests.get(API_ENDPOINT, params=params)
+    r = r.json()['query']['pages']
+    pageid = next(iter(r.keys()))
+
+    if pageid == '-1':
+        print('No disambiguations found for: \'{}\''.format(title))
+    else:
+        r = r[pageid]
+        for link_num, link in enumerate(r['links'], start=1):
+            if link['ns'] == 0:
+                print('{} - {}'.format(link_num, link['title']))
+
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('title', help='Title of page to search for')
+    parser.add_argument('-l', '--list-disambiguations', action='store_true',
+                        help='List all disambiguations for the given title')
+    # parser.add_argument('-d', '--disambiguation', type=int, help='Output specified disambiguation')
     args = parser.parse_args()
+    title = args.title.strip()
 
-    get_wiki_summary(args.title)
-
+    if args.list_disambiguations:
+        get_disambiguation_titles(title)
+    else:
+        get_wiki_summary(title)
 
 if __name__ == '__main__':
     main()
