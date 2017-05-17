@@ -23,9 +23,7 @@ def get_wiki_summary(title):
     if pageid == '-1':
         print('No page found for: \'{}\''.format(title))
     else:
-        r = r[pageid]
-        page_title = r['title']
-        summary = r['extract']
+        summary = r[pageid]['extract']
         print(summary)
 
 
