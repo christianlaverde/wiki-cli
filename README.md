@@ -41,7 +41,8 @@ Wikipedia, and found that Wikipedia's level of accuracy approached
 Encyclopædia Britannica's. Criticism of Wikipedia includes claims that
 it exhibits systemic bias, presents a mixture of "truths, half truths,
 and some falsehoods", and that, in controversial topics, it is subject
-to manipulation and spin.  ```
+to manipulation and spin.
+```
 
 ```
 $ ./wiki.py "Philosophy" -l
