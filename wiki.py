@@ -2,6 +2,7 @@
 
 import argparse
 import requests
+import re
 
 API_ENDPOINT = 'https://en.wikipedia.org/w/api.php'
 
@@ -54,6 +55,10 @@ def main():
                         help='List all disambiguations for the given title')
     args = parser.parse_args()
     title = args.title.strip()
+
+    m = re.search('\(.*\)', title)
+    if m is not None:
+        title = '{} {}'.format(title.replace(m.group(), '').strip().title(), m.group())
 
     if args.list_disambiguations:
         get_disambiguation_titles(title)
