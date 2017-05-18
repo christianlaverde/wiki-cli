@@ -22,10 +22,10 @@ def get_wiki_summary(title):
     pageid = next(iter(r.keys()))
 
     if pageid == '-1':
-        print('No page found for: \'{}\''.format(title))
+        return None
     else:
         summary = r[pageid]['extract']
-        print(summary)
+        return summary
 
 
 def get_disambiguation_list(title):
@@ -40,12 +40,11 @@ def get_disambiguation_list(title):
     pageid = next(iter(r.keys()))
 
     if pageid == '-1':
-        print('No disambiguations found for: \'{}\''.format(title))
+        return None
     else:
         r = r[pageid]
-        for link_num, link in enumerate(r['links'], start=1):
-            if link['ns'] == 0:
-                print('{} - {}'.format(link_num, link['title']))
+        titles = [link['title'] for link in r['links']]
+        return titles
 
 
 def main():
@@ -61,9 +60,17 @@ def main():
         title = '{} {}'.format(title.replace(m.group(), '').strip().title(), m.group())
 
     if args.list_disambiguations:
-        get_disambiguation_list(title)
+        titles = get_disambiguation_list(title)
+        if titles is not None:
+            for i, title in enumerate(titles, start=1):
+                print('{} - {}'.format(i, title))
+        else:
+            print('No disambiguations found for: \'{}\''.format(title))
     else:
-        get_wiki_summary(title)
-
+        summary = get_wiki_summary(title)
+        if summary is not None:
+            print(summary)
+        else:
+            print('No page found for: \'{}\''.format(title))
 if __name__ == '__main__':
     main()
