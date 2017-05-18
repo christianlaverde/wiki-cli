@@ -3,7 +3,7 @@ A command line interface to retrieve summaries from Wikipedia
 
 # Usage
 ```
-usage: wiki.py [-h] [-l] title
+usage: wiki.py [-h] [-l | -d DISAMBIGUATION] [-u] title
 
 positional arguments:
   title                 Title of page to search for
@@ -11,8 +11,10 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -l, --list-disambiguations
-                        List all disambiguations for the given title
-
+                        List all disambiguations for the given TITLE
+  -d DISAMBIGUATION, --disambiguation DISAMBIGUATION
+                        Choose the Nth disambiguation for TITLE
+  -u, --url             Output the url of the page
 ```
 
 # Examples
