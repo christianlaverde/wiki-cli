@@ -112,11 +112,8 @@ def main():
     if args.list_disambiguations:
         titles = get_disambiguation_list(title)
         if titles is not None:
-            # Needed to save the title for the url
-            tmp = title
-            for i, title in enumerate(titles, start=1):
-                print('{} - {}'.format(i, title))
-            title = tmp
+            for i, t in enumerate(titles, start=1):
+                print('{} - {}'.format(i, t))
         else:
             parser.error('No disambiguations found for: \'{}\''.format(title))
     elif args.disambiguation is not None:
