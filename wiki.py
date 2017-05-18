@@ -48,14 +48,21 @@ def get_disambiguation_list(title):
 
 
 def get_disambiguation_title(title, index):
-    pass
+    titles = get_disambiguation_list(title)
+    if index > len(titles):
+        return None
+    else:
+        return titles[index-1]
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('title', help='Title of page to search for')
-    parser.add_argument('-l', '--list-disambiguations', action='store_true',
-                        help='List all disambiguations for the given title')
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('-l', '--list-disambiguations', action='store_true',
+                       help='List all disambiguations for the given TITLE')
+    group.add_argument('-d', '--disambiguation', type=int,
+                       help='Choose the Nth disambiguation for TITLE')
     args = parser.parse_args()
     title = args.title.strip()
 
@@ -72,12 +79,23 @@ def main():
             for i, title in enumerate(titles, start=1):
                 print('{} - {}'.format(i, title))
         else:
-            print('No disambiguations found for: \'{}\''.format(title))
+            parser.error('No disambiguations found for: \'{}\''.format(title))
+    elif args.disambiguation is not None:
+        index = args.disambiguation
+        if index <= 0:
+            parser.error('Disambiguation index must be a positive integer')
+        title = get_disambiguation_title(title, index)
+        if title is not None:
+            summary = get_wiki_summary(title)
+            print(summary)
+        else:
+            parser.error('Disambiguation index too large')
     else:
         summary = get_wiki_summary(title)
         if summary is not None:
             print(summary)
         else:
-            print('No page found for: \'{}\''.format(title))
+            parser.error('No page found for: \'{}\''.format(title))
+
 if __name__ == '__main__':
     main()
