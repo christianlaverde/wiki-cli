@@ -102,7 +102,7 @@ def main():
     title = args.title.strip()
 
     # Prevents .title() from changing what's inside parentheses
-    m = re.search('\(.*\)', title)
+    m = re.search('(\([A-Za-z]*\)$)', title)
     if m is not None:
         title = '{} {}'.format(
             title.replace(m.group(), '').strip().title(),
