@@ -28,7 +28,7 @@ def get_wiki_summary(title):
         print(summary)
 
 
-def get_disambiguation_titles(title):
+def get_disambiguation_list(title):
     params = {
         'action': 'query',
         'format': 'json',
@@ -61,7 +61,7 @@ def main():
         title = '{} {}'.format(title.replace(m.group(), '').strip().title(), m.group())
 
     if args.list_disambiguations:
-        get_disambiguation_titles(title)
+        get_disambiguation_list(title)
     else:
         get_wiki_summary(title)
 
