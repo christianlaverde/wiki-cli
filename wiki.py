@@ -8,6 +8,10 @@ API_ENDPOINT = 'https://en.wikipedia.org/w/api.php'
 
 
 def get_wiki_summary(title):
+    """
+    Return the wikipedia extract of the page for title, or None if no
+    page is found
+    """
     params = {
         'action': 'query',
         'format': 'json',
@@ -29,6 +33,10 @@ def get_wiki_summary(title):
 
 
 def get_disambiguation_list(title):
+    """
+    Return a list of all the titles on the disambiguation page for
+    title or None if no page is found
+    """
     params = {
         'action': 'query',
         'format': 'json',
@@ -48,6 +56,10 @@ def get_disambiguation_list(title):
 
 
 def get_disambiguation_title(title, index):
+    """
+    Return the title in the disambiguation title list at index or None
+    if index is too large
+    """
     titles = get_disambiguation_list(title)
     if index > len(titles):
         return None
@@ -66,6 +78,7 @@ def main():
     args = parser.parse_args()
     title = args.title.strip()
 
+    # Prevents .title() from changing what's inside parentheses
     m = re.search('\(.*\)', title)
     if m is not None:
         title = '{} {}'.format(
