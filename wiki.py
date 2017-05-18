@@ -66,6 +66,7 @@ def get_disambiguation_title(title, index):
     else:
         return titles[index-1]
 
+
 def get_page_url(title):
     """Returns the url for the given title
     """
