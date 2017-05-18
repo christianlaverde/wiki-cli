@@ -43,7 +43,7 @@ def get_disambiguation_list(title):
         return None
     else:
         r = r[pageid]
-        titles = [link['title'] for link in r['links']]
+        titles = [link['title'] for link in r['links'] if link['ns'] == 0]
         return titles
 
 
