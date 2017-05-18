@@ -47,6 +47,10 @@ def get_disambiguation_list(title):
         return titles
 
 
+def get_disambiguation_title(title, index):
+    pass
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('title', help='Title of page to search for')
@@ -57,7 +61,10 @@ def main():
 
     m = re.search('\(.*\)', title)
     if m is not None:
-        title = '{} {}'.format(title.replace(m.group(), '').strip().title(), m.group())
+        title = '{} {}'.format(
+            title.replace(m.group(), '').strip().title(),
+            m.group()
+        )
 
     if args.list_disambiguations:
         titles = get_disambiguation_list(title)
