@@ -66,6 +66,26 @@ def get_disambiguation_title(title, index):
     else:
         return titles[index-1]
 
+def get_page_url(title):
+    """Returns the url for the given title
+    """
+    params = {
+        'action': 'query',
+        'prop': 'info',
+        'format': 'json',
+        'inprop': 'url',
+        'titles': title
+    }
+    r = requests.get(API_ENDPOINT, params=params)
+    r = r.json()['query']['pages']
+    pageid = next(iter(r.keys()))
+
+    if pageid == '-1':
+        return None
+    else:
+        url = r[pageid]['fullurl']
+        return url
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -75,6 +95,8 @@ def main():
                        help='List all disambiguations for the given TITLE')
     group.add_argument('-d', '--disambiguation', type=int,
                        help='Choose the Nth disambiguation for TITLE')
+    parser.add_argument('-u', '--url', action='store_true',
+                        help='Output the url of the page')
     args = parser.parse_args()
     title = args.title.strip()
 
@@ -89,8 +111,11 @@ def main():
     if args.list_disambiguations:
         titles = get_disambiguation_list(title)
         if titles is not None:
+            # Needed to save the title for the url
+            tmp = title
             for i, title in enumerate(titles, start=1):
                 print('{} - {}'.format(i, title))
+            title = tmp
         else:
             parser.error('No disambiguations found for: \'{}\''.format(title))
     elif args.disambiguation is not None:
@@ -109,6 +134,13 @@ def main():
             print(summary)
         else:
             parser.error('No page found for: \'{}\''.format(title))
+
+    if args.url:
+        url = get_page_url(title)
+        if url is not None:
+            print(url)
+        else:
+            parser.error('No url found for: \'{}\''.format(title))
 
 if __name__ == '__main__':
     main()
