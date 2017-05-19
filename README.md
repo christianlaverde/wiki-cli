@@ -19,7 +19,7 @@ optional arguments:
 
 # Examples
 ```
-./wiki.py git
+$ ./wiki.py git
 Git (/ɡɪt/) is a version control system (VCS) for
 tracking changes in computer files and coordinating work on those
 files among multiple people. It is primarily used for softwa re
