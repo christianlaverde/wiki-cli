@@ -90,14 +90,14 @@ def get_page_url(title):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('title', help='Title of page to search for')
+    parser.add_argument('title', help='title of page to search for')
     group = parser.add_mutually_exclusive_group()
     group.add_argument('-l', '--list-disambiguations', action='store_true',
-                       help='List all disambiguations for the given TITLE')
+                       help='list all disambiguations for the given TITLE')
     group.add_argument('-d', '--disambiguation', type=int,
-                       help='Choose the Nth disambiguation for TITLE')
+                       help='choose the Nth disambiguation for TITLE')
     parser.add_argument('-u', '--url', action='store_true',
-                        help='Output the url of the page')
+                        help='output the url of the page')
     args = parser.parse_args()
     title = args.title.strip()
 
