@@ -40,7 +40,7 @@ terms of the GNU Gener al Public License version 2.
 
 ```
 $ ./wiki.py "Philosophy" -l
-
+1 - Philosophical theory
 2 - Philosophy
 3 - Philosophy: The Best of Bill Hicks
 4 - Philosophy (Ben Folds Five song)
