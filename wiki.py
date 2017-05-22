@@ -7,10 +7,13 @@ import re
 API_ENDPOINT = 'https://en.wikipedia.org/w/api.php'
 
 
+class PageNotFoundError(Exception):
+    pass
+
+
 def get_wiki_summary(title):
     """
-    Return the wikipedia extract of the page for title, or None if no
-    page is found
+    Return the wikipedia extract of the page for title
     """
     params = {
         'action': 'query',
@@ -26,16 +29,16 @@ def get_wiki_summary(title):
     pageid = next(iter(r.keys()))
 
     if pageid == '-1':
-        return None
-    else:
-        summary = r[pageid]['extract']
-        return summary
+        raise PageNotFoundError
+
+    summary = r[pageid]['extract']
+    return summary
 
 
 def get_disambiguation_list(title):
     """
     Return a list of all the titles on the disambiguation page for
-    title or None if no page is found
+    title
     """
     params = {
         'action': 'query',
@@ -48,23 +51,24 @@ def get_disambiguation_list(title):
     pageid = next(iter(r.keys()))
 
     if pageid == '-1':
-        return None
-    else:
-        r = r[pageid]
-        titles = [link['title'] for link in r['links'] if link['ns'] == 0]
-        return titles
+        raise PageNotFoundError
+
+    r = r[pageid]
+    titles = [link['title'] for link in r['links'] if link['ns'] == 0]
+    return titles
 
 
 def get_disambiguation_title(title, index):
     """
-    Return the title in the disambiguation title list at index or None
-    if index is too large
+    Return the title in the disambiguation title list at index
     """
+    if index <= 0:
+        raise IndexError
     titles = get_disambiguation_list(title)
     if index > len(titles):
-        return None
-    else:
-        return titles[index-1]
+        raise IndexError
+
+    return titles[index-1]
 
 
 def get_page_url(title):
@@ -82,10 +86,10 @@ def get_page_url(title):
     pageid = next(iter(r.keys()))
 
     if pageid == '-1':
-        return None
-    else:
-        url = r[pageid]['fullurl']
-        return url
+        raise PageNotFoundError
+
+    url = r[pageid]['fullurl']
+    return url
 
 
 def main():
@@ -101,7 +105,8 @@ def main():
     args = parser.parse_args()
     title = args.title.strip()
 
-    # Prevents .title() from changing what's inside parentheses
+    # Prevents string.title() from changing what's inside parentheses
+    # Searches for words in parens at the end of the line
     m = re.search('(\([A-Za-z]*\)$)', title)
     if m is not None:
         title = '{} {}'.format(
@@ -110,35 +115,33 @@ def main():
         )
 
     if args.list_disambiguations:
-        titles = get_disambiguation_list(title)
-        if titles is not None:
+        try:
+            titles = get_disambiguation_list(title)
             for i, t in enumerate(titles, start=1):
                 print('{} - {}'.format(i, t))
-        else:
-            parser.error('No disambiguations found for: \'{}\''.format(title))
+        except PageNotFoundError:
+            parser.error('no disambiguations found for: \'{}\''.format(title))
     elif args.disambiguation is not None:
-        index = args.disambiguation
-        if index <= 0:
-            parser.error('Disambiguation index must be a positive integer')
-        title = get_disambiguation_title(title, index)
-        if title is not None:
+        try:
+            index = args.disambiguation
+            title = get_disambiguation_title(title, index)
             summary = get_wiki_summary(title)
             print(summary)
-        else:
-            parser.error('Disambiguation index too large')
+        except IndexError:
+            parser.error('disambiguation index out of range')
     else:
-        summary = get_wiki_summary(title)
-        if summary is not None:
+        try:
+            summary = get_wiki_summary(title)
             print(summary)
-        else:
-            parser.error('No page found for: \'{}\''.format(title))
+        except PageNotFoundError:
+            parser.error('no page found for: \'{}\''.format(title))
 
     if args.url:
-        url = get_page_url(title)
-        if url is not None:
+        try:
+            url = get_page_url(title)
             print(url)
-        else:
-            parser.error('No url found for: \'{}\''.format(title))
+        except PageNotFoundError:
+            parser.error('no url found for: \'{}\''.format(title))
 
 if __name__ == '__main__':
     main()
