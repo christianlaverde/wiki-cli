@@ -93,7 +93,8 @@ def get_page_url(title):
 
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description='Get summaries from Wikipedia')
     parser.add_argument('title', help='title of page to search for')
     group = parser.add_mutually_exclusive_group()
     group.add_argument('-l', '--list-disambiguations', action='store_true',
@@ -109,10 +110,8 @@ def main():
     # Searches for words in parens at the end of the line
     m = re.search('(\([A-Za-z]*\)$)', title)
     if m is not None:
-        title = '{} {}'.format(
-            title.replace(m.group(), '').strip().title(),
-            m.group()
-        )
+        title = title.replace(m.group(), '').strip().title()
+        title = '{} {}'.format(title, m.group())
 
     if args.list_disambiguations:
         try:
