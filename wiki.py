@@ -112,6 +112,8 @@ def main():
     if m is not None:
         title = title.replace(m.group(), '').strip().title()
         title = '{} {}'.format(title, m.group())
+    else:
+        title = title.title()
 
     if args.list_disambiguations:
         try:
