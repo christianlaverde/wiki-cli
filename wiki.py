@@ -6,7 +6,6 @@ import re
 
 API_ENDPOINT = 'https://en.wikipedia.org/w/api.php'
 
-
 class PageNotFoundError(Exception):
     pass
 
@@ -108,7 +107,7 @@ def main():
 
     # Prevents string.title() from changing what's inside parentheses
     # Searches for words in parens at the end of the line
-    m = re.search('(\([A-Za-z]*\)$)', title)
+    m = re.search(r'(\([A-Za-z]*\)$)', title)
     if m is not None:
         title = title.replace(m.group(), '').strip().title()
         title = '{} {}'.format(title, m.group())
