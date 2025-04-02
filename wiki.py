@@ -90,8 +90,7 @@ def get_page_url(title):
     url = r[pageid]['fullurl']
     return url
 
-
-def main():
+def createParser():
     parser = argparse.ArgumentParser(
         description='Get summaries from Wikipedia')
     parser.add_argument('title', help='title of page to search for')
@@ -102,6 +101,11 @@ def main():
                        help='choose the Nth disambiguation for TITLE')
     parser.add_argument('-u', '--url', action='store_true',
                         help='output the url of the page')
+
+    return parser
+
+def main():
+    parser = createParser()
     args = parser.parse_args()
     title = args.title.strip()
 
