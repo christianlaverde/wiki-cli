@@ -4,8 +4,6 @@ import argparse
 import requests
 import re
 
-API_ENDPOINT = 'https://en.wikipedia.org/w/api.php'
-
 class PageNotFoundError(Exception):
     pass
 
@@ -70,6 +68,7 @@ def get_page_url(title):
     return url
 
 def get_result_and_pageid(params):
+    API_ENDPOINT = 'https://en.wikipedia.org/w/api.php'
     default_params = {'action': 'query', 'format': 'json'}
     params.update(default_params)
     result = requests.get(API_ENDPOINT, params=params)
