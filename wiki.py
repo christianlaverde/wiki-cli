@@ -15,20 +15,13 @@ def get_wiki_summary(title):
     Return the wikipedia extract of the page for title
     """
     params = {
-        'action': 'query',
-        'format': 'json',
         'prop': 'extracts',
         'exintro': '',
         'explaintext': '',
         'redirects': '',
         'titles': title
     }
-    r = requests.get(API_ENDPOINT, params=params)
-    r = r.json()['query']['pages']
-    pageid = next(iter(r.keys()))
-
-    if pageid == '-1':
-        raise PageNotFoundError
+    r, pageid = get_result_and_pageid(params)
 
     summary = r[pageid]['extract']
     return summary
@@ -40,17 +33,10 @@ def get_disambiguation_list(title):
     title
     """
     params = {
-        'action': 'query',
-        'format': 'json',
         'titles': '{} (disambiguation)'.format(title),
         'prop': 'links'
     }
-    r = requests.get(API_ENDPOINT, params=params)
-    r = r.json()['query']['pages']
-    pageid = next(iter(r.keys()))
-
-    if pageid == '-1':
-        raise PageNotFoundError
+    r, pageid = get_result_and_pageid(params)
 
     r = r[pageid]
     titles = [link['title'] for link in r['links'] if link['ns'] == 0]
@@ -74,21 +60,26 @@ def get_page_url(title):
     """Returns the url for the given title
     """
     params = {
-        'action': 'query',
         'prop': 'info',
-        'format': 'json',
         'inprop': 'url',
         'titles': title
     }
-    r = requests.get(API_ENDPOINT, params=params)
-    r = r.json()['query']['pages']
-    pageid = next(iter(r.keys()))
-
-    if pageid == '-1':
-        raise PageNotFoundError
+    r, pageid = get_result_and_pageid(params)
 
     url = r[pageid]['fullurl']
     return url
+
+def get_result_and_pageid(params):
+    default_params = {'action': 'query', 'format': 'json'}
+    params.update(default_params)
+    result = requests.get(API_ENDPOINT, params=params)
+    result = result.json()['query']['pages']
+    pageid = next(iter(result.keys()))
+
+    if pageid == '-1':
+        raise PageNotFoundError
+    
+    return result, pageid
 
 def createParser():
     parser = argparse.ArgumentParser(
