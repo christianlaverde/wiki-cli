@@ -52,10 +52,7 @@ def get_page_url(title):
     return url
 
 def get_disambiguation_list(title):
-    """
-    Return a list of all the titles on the disambiguation page for
-    title
-    """
+    """Return a list of possible disambiguation titles."""
     params = {
         'titles': '{} (disambiguation)'.format(title),
         'prop': 'links'
