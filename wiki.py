@@ -39,7 +39,7 @@ def get_summary(title):
     return fetch_wiki_data(params)['extract']
 
 
-def get_disambiguation_title_list(title):
+def get_disambiguation_list(title):
     """
     Return a list of all the titles on the disambiguation page for
     title
@@ -48,9 +48,9 @@ def get_disambiguation_title_list(title):
         'titles': '{} (disambiguation)'.format(title),
         'prop': 'links'
     }
-    result  = fetch_wiki_data(params)
+    links = fetch_wiki_data(params)['links']
+    titles = [link['title'] for link in links if link['ns'] == 0]
 
-    titles = [link['title'] for link in result['links'] if link['ns'] == 0]
     return titles
 
 
@@ -60,7 +60,7 @@ def get_disambiguation_title(title, index):
     """
     if index <= 0:
         raise IndexError
-    titles = get_disambiguation_title_list(title)
+    titles = get_disambiguation_list(title)
     if index > len(titles):
         raise IndexError
 
@@ -96,7 +96,7 @@ def createParser():
 
 def process_list_disambiguations(title, parser):
     try:
-        title_list = get_disambiguation_title_list(title)
+        title_list = get_disambiguation_list(title)
         for i, title in enumerate(title_list, start=1):
             print('{} - {}'.format(i, title))
     except PageNotFoundError:
