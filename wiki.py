@@ -25,7 +25,7 @@ def get_wiki_summary(title):
     return summary
 
 
-def get_disambiguation_list(title):
+def get_disambiguation_title_list(title):
     """
     Return a list of all the titles on the disambiguation page for
     title
@@ -47,7 +47,7 @@ def get_disambiguation_title(title, index):
     """
     if index <= 0:
         raise IndexError
-    titles = get_disambiguation_list(title)
+    titles = get_disambiguation_title_list(title)
     if index > len(titles):
         raise IndexError
 
@@ -94,6 +94,32 @@ def createParser():
 
     return parser
 
+def process_list_disambiguations(title, parser):
+    try:
+        title_list = get_disambiguation_title_list(title)
+        for i, title in enumerate(title_list, start=1):
+            print('{} - {}'.format(i, title))
+    except PageNotFoundError:
+        parser.error('no disambiguations found for: \'{}\''.format(title))
+
+def process_disambiguation_selection(args, parser):
+    try:
+        disambiguation_selection = args.disambiguation
+        title = get_disambiguation_title(title, disambiguation_selection)
+        summary = get_wiki_summary(title)
+        print(summary)
+    except IndexError:
+        parser.error('disambiguation index out of range')
+
+def process_wiki_summary(title, parser):
+    try:
+        summary = get_wiki_summary(title)
+        print(summary)
+    except PageNotFoundError:
+        parser.error('no page found for: \'{}\''.format(title))   
+    
+
+
 def main():
     parser = createParser()
     args = parser.parse_args()
@@ -109,26 +135,11 @@ def main():
         title = title.title()
 
     if args.list_disambiguations:
-        try:
-            titles = get_disambiguation_list(title)
-            for i, t in enumerate(titles, start=1):
-                print('{} - {}'.format(i, t))
-        except PageNotFoundError:
-            parser.error('no disambiguations found for: \'{}\''.format(title))
+        process_list_disambiguations(title, parser)
     elif args.disambiguation is not None:
-        try:
-            index = args.disambiguation
-            title = get_disambiguation_title(title, index)
-            summary = get_wiki_summary(title)
-            print(summary)
-        except IndexError:
-            parser.error('disambiguation index out of range')
+        process_disambiguation_selection(args, parser)
     else:
-        try:
-            summary = get_wiki_summary(title)
-            print(summary)
-        except PageNotFoundError:
-            parser.error('no page found for: \'{}\''.format(title))
+        process_wiki_summary(title, parser)
 
     if args.url:
         try:
