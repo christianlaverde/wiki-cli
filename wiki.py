@@ -97,23 +97,27 @@ def handle_list_disambiguations(title, parser):
     except PageNotFoundError:
         parser.error(f'No disambiguations found for: "{title}"')
 
-def process_disambiguation_selection(args, parser):
+def handle_disambiguation_summary(title, index, parser):
     try:
-        disambiguation_selection = args.disambiguation
-        title = get_disambiguation_title(title, disambiguation_selection)
-        summary = get_summary(title)
+        selected_title = get_disambiguation_title(title, index)
+        summary = get_summary(selected_title)
         print(summary)
     except IndexError:
         parser.error('disambiguation index out of range')
 
-def process_wiki_summary(title, parser):
+def handle_summary(title, parser):
     try:
         summary = get_summary(title)
         print(summary)
     except PageNotFoundError:
-        parser.error('no page found for: \'{}\''.format(title))   
-    
+        parser.error(f'No page found for: "{title}"')
 
+def handle_url(title, parser):
+    try:
+        url = get_page_url(title)
+        print(url)
+    except PageNotFoundError:
+        parser.error(f'No URL found for: "{title}"')
 
 def main():
     parser = build_arg_parser()
@@ -123,16 +127,13 @@ def main():
     if args.list_disambiguations:
         handle_list_disambiguations(title, parser)
     elif args.disambiguation is not None:
-        process_disambiguation_selection(args, parser)
+        handle_disambiguation_summary(title, args.disambiguation, parser)
     else:
-        process_wiki_summary(title, parser)
+        handle_summary(title, parser)
 
     if args.url:
-        try:
-            url = get_page_url(title)
-            print(url)
-        except PageNotFoundError:
-            parser.error('no url found for: \'{}\''.format(title))
+        handle_url(title, parser)
+
 
 if __name__ == '__main__':
     main()
