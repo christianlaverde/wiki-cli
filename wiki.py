@@ -72,7 +72,6 @@ def get_disambiguation_list(title):
 
     return titles
 
-
 def get_disambiguation_title(title, index):
     """Return the Nth title from the disambiguation list."""
     titles = get_disambiguation_list(title)
@@ -113,11 +112,8 @@ def handle_disambiguation_summary(title, index, parser):
         parser.error('disambiguation index out of range')
 
 def handle_summary(title, parser):
-    try:
-        summary = get_summary(title)
-        print(summary)
-    except PageNotFoundError:
-        parser.error(f'No page found for: "{title}"')
+    summary = get_summary(title)
+    print(summary)
 
 def handle_url(title, parser):
     try:
@@ -131,15 +127,21 @@ def main():
     args = parser.parse_args()
     title = args.title.strip()
 
-    if args.list_disambiguations:
-        handle_list_disambiguations(title, parser)
-    elif args.disambiguation is not None:
-        handle_disambiguation_summary(title, args.disambiguation, parser)
-    else:
-        handle_summary(title, parser)
+    try:
+        if args.list_disambiguations:
+            handle_list_disambiguations(title, parser)
+        elif args.disambiguation is not None:
+            handle_disambiguation_summary(title, args.disambiguation, parser)
+        else:
+            handle_summary(title, parser)
 
-    if args.url:
-        handle_url(title, parser)
+        if args.url:
+            handle_url(title, parser)
+
+    except (PageNotFoundError, DisambiguationNotFoundError, IndexError) as e:
+        parser.error(str(e))
+    except Exception as e:
+        parser.error(f'Unexpected error: {e}')
 
 
 if __name__ == '__main__':
