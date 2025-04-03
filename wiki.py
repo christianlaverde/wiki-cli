@@ -2,7 +2,6 @@
 
 import argparse
 import requests
-import re
 
 # --- Exceptions ---
 class WikipediaError(Exception):
