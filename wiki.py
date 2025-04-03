@@ -6,6 +6,11 @@ import re
 
 # --- Exceptions ---
 class PageNotFoundError(Exception):
+    """Custom exception when a Wikipedia page is not found."""
+    pass
+
+class DisambiguationNotFoundError(PageNotFoundError):
+    """Custom exception when a disambiguation page has no valid entries."""
     pass
 
 # --- Wikipedia API Utilities ---
