@@ -125,7 +125,8 @@ def main():
         if args.list_disambiguations:
             handle_list_disambiguations(title)
         elif args.disambiguation is not None:
-            handle_disambiguation_summary(title, args.disambiguation)
+            disambiguation_index = args.disambiguation
+            handle_disambiguation_summary(title, disambiguation_index)
         else:
             handle_summary(title)
 
