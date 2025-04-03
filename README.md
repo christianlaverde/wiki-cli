@@ -5,16 +5,18 @@ A command line interface to retrieve summaries from Wikipedia
 ```
 usage: wiki.py [-h] [-l | -d DISAMBIGUATION] [-u] title
 
-positional arguments:
-  title                 Title of page to search for
+Get Wikipedia Summaries.
 
-optional arguments:
+positional arguments:
+  title                 Title of the page to search for
+
+options:
   -h, --help            show this help message and exit
   -l, --list-disambiguations
-                        List all disambiguations for the given TITLE
-  -d DISAMBIGUATION, --disambiguation DISAMBIGUATION
-                        Choose the Nth disambiguation for TITLE
-  -u, --url             Output the url of the page
+                        List all disambiguation options
+  -d, --disambiguation DISAMBIGUATION
+                        Use the Nth disambiguation
+  -u, --url             Output the page url
 ```
 
 # Examples
