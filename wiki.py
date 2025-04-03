@@ -19,9 +19,9 @@ def get_wiki_summary(title):
         'redirects': '',
         'titles': title
     }
-    r, pageid = get_result_and_pageid(params)
+    result  = get_result(params)
 
-    summary = r[pageid]['extract']
+    summary = result['extract']
     return summary
 
 
@@ -34,10 +34,9 @@ def get_disambiguation_title_list(title):
         'titles': '{} (disambiguation)'.format(title),
         'prop': 'links'
     }
-    r, pageid = get_result_and_pageid(params)
+    result  = get_result(params)
 
-    r = r[pageid]
-    titles = [link['title'] for link in r['links'] if link['ns'] == 0]
+    titles = [link['title'] for link in result['links'] if link['ns'] == 0]
     return titles
 
 
@@ -62,23 +61,24 @@ def get_page_url(title):
         'inprop': 'url',
         'titles': title
     }
-    r, pageid = get_result_and_pageid(params)
+    result  = get_result(params)
 
-    url = r[pageid]['fullurl']
+    url = result['fullurl']
     return url
 
-def get_result_and_pageid(params):
+def get_result(params):
     API_ENDPOINT = 'https://en.wikipedia.org/w/api.php'
     default_params = {'action': 'query', 'format': 'json'}
     params.update(default_params)
-    result = requests.get(API_ENDPOINT, params=params)
-    result = result.json()['query']['pages']
+    result = requests.get(API_ENDPOINT, params=params).json()
+    result = result['query']['pages']
     pageid = next(iter(result.keys()))
+    result = result[pageid]
 
     if pageid == '-1':
         raise PageNotFoundError
     
-    return result, pageid
+    return result
 
 def createParser():
     parser = argparse.ArgumentParser(
