@@ -8,7 +8,7 @@ import re
 class PageNotFoundError(Exception):
     pass
 
-# --- Wikipedia API Utilities
+# --- Wikipedia API Utilities ---
 def fetch_wiki_data(params):
     """Make a request to the Wikipedia API and return the result."""
     WIKI_API_ENDPOINT = 'https://en.wikipedia.org/w/api.php'
@@ -25,10 +25,10 @@ def fetch_wiki_data(params):
     
     return page
 
-def get_wiki_summary(title):
-    """
-    Return the wikipedia extract of the page for title
-    """
+# --- Wikipedia Functionality ---
+
+def get_summary(title):
+    """Return the wikipedia extract (summary) for the given title."""
     params = {
         'prop': 'extracts',
         'exintro': '',
@@ -36,10 +36,7 @@ def get_wiki_summary(title):
         'redirects': '',
         'titles': title
     }
-    result  = fetch_wiki_data(params)
-
-    summary = result['extract']
-    return summary
+    return fetch_wiki_data(params)['extract']
 
 
 def get_disambiguation_title_list(title):
