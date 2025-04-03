@@ -106,14 +106,14 @@ def process_disambiguation_selection(args, parser):
     try:
         disambiguation_selection = args.disambiguation
         title = get_disambiguation_title(title, disambiguation_selection)
-        summary = get_wiki_summary(title)
+        summary = get_summary(title)
         print(summary)
     except IndexError:
         parser.error('disambiguation index out of range')
 
 def process_wiki_summary(title, parser):
     try:
-        summary = get_wiki_summary(title)
+        summary = get_summary(title)
         print(summary)
     except PageNotFoundError:
         parser.error('no page found for: \'{}\''.format(title))   
