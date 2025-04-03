@@ -120,15 +120,6 @@ def main():
     args = parser.parse_args()
     title = args.title.strip()
 
-    # Prevents string.title() from changing what's inside parentheses
-    # Searches for words in parens at the end of the line
-    m = re.search(r'(\([A-Za-z]*\)$)', title)
-    if m is not None:
-        title = title.replace(m.group(), '').strip().title()
-        title = '{} {}'.format(title, m.group())
-    else:
-        title = title.title()
-
     if args.list_disambiguations:
         process_list_disambiguations(title, parser)
     elif args.disambiguation is not None:
