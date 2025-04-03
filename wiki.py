@@ -100,12 +100,9 @@ def build_arg_parser():
     return parser
 
 def handle_list_disambiguations(title, parser):
-    try:
-        titles = get_disambiguation_list(title)
-        for i, title in enumerate(titles, 1):
-            print(f'{i} - {title}')
-    except PageNotFoundError:
-        parser.error(f'No disambiguations found for: "{title}"')
+    titles = get_disambiguation_list(title)
+    for i, title in enumerate(titles, 1):
+        print(f'{i} - {title}')
 
 def handle_disambiguation_summary(title, index, parser):
     try:
