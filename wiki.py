@@ -72,17 +72,20 @@ def get_disambiguation_title(title, index):
 
     return title
 
-def createParser():
-    parser = argparse.ArgumentParser(
-        description='Get summaries from Wikipedia')
-    parser.add_argument('title', help='title of page to search for')
+# --- Argument Parsing and CLI Logic ---
+
+def build_arg_parser():
+    parser = argparse.ArgumentParser(description='Get Wikipedia Summaries.')
+    parser.add_argument('title', help='Title of the page to search for')
+
     group = parser.add_mutually_exclusive_group()
     group.add_argument('-l', '--list-disambiguations', action='store_true',
-                       help='list all disambiguations for the given TITLE')
+                       help='List all disambiguation options')
     group.add_argument('-d', '--disambiguation', type=int,
-                       help='choose the Nth disambiguation for TITLE')
+                       help='Use the Nth disambiguation')
+    
     parser.add_argument('-u', '--url', action='store_true',
-                        help='output the url of the page')
+                        help='Output the page url')
 
     return parser
 
@@ -113,7 +116,7 @@ def process_wiki_summary(title, parser):
 
 
 def main():
-    parser = createParser()
+    parser = build_arg_parser()
     args = parser.parse_args()
     title = args.title.strip()
 
