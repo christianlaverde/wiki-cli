@@ -26,7 +26,7 @@ def fetch_wiki_data(params):
     page = pages[pageid]
 
     if pageid == '-1':
-        raise PageNotFoundError
+        raise PageNotFoundError('Page not found')
     
     return page
 
