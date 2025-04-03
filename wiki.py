@@ -64,30 +64,13 @@ def get_disambiguation_list(title):
 
 
 def get_disambiguation_title(title, index):
-    """
-    Return the title in the disambiguation title list at index
-    """
-    if index <= 0:
-        raise IndexError
+    """Return the Nth title from the disambiguation list."""
     titles = get_disambiguation_list(title)
-    if index > len(titles):
-        raise IndexError
+    if index < 1 or index > len(titles):
+        raise IndexError('Invalid disambiguation index.')
+    title = titles[index - 1]
 
-    return titles[index-1]
-
-
-def get_page_url(title):
-    """Returns the url for the given title
-    """
-    params = {
-        'prop': 'info',
-        'inprop': 'url',
-        'titles': title
-    }
-    result  = fetch_wiki_data(params)
-
-    url = result['fullurl']
-    return url
+    return title
 
 def createParser():
     parser = argparse.ArgumentParser(
