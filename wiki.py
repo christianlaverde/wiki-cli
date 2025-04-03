@@ -89,13 +89,13 @@ def build_arg_parser():
 
     return parser
 
-def process_list_disambiguations(title, parser):
+def handle_list_disambiguations(title, parser):
     try:
-        title_list = get_disambiguation_list(title)
-        for i, title in enumerate(title_list, start=1):
-            print('{} - {}'.format(i, title))
+        titles = get_disambiguation_list(title)
+        for i, title in enumerate(titles, 1):
+            print(f'{i} - {title}')
     except PageNotFoundError:
-        parser.error('no disambiguations found for: \'{}\''.format(title))
+        parser.error(f'No disambiguations found for: "{title}"')
 
 def process_disambiguation_selection(args, parser):
     try:
@@ -121,7 +121,7 @@ def main():
     title = args.title.strip()
 
     if args.list_disambiguations:
-        process_list_disambiguations(title, parser)
+        handle_list_disambiguations(title, parser)
     elif args.disambiguation is not None:
         process_disambiguation_selection(args, parser)
     else:
