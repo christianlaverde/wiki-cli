@@ -46,9 +46,15 @@ $ ./wiki.py "Philosophy" -l
 2 - Philosophy
 3 - Philosophy: The Best of Bill Hicks
 4 - Philosophy (Ben Folds Five song)
-5 - Philosophy (album)
-6 - Philosophy (journal)
-7 - Philosophy of life
-8 - Salvator Rosa
-9 - Tom Snare1 - Philosophical theory
+5 - Philosophy (Salvator Rosa)
+6 - Philosophy (album)
+7 - Philosophy (brand)
+8 - Philosophy (journal)
+9 - Philosophy of life
+10 - Tom Snare
+```
+
+```
+$ ./wiki.py "Philosophy" -d 10
+Xavier Decanter (French pronunciation: [ɡzavje dəkɑ̃tɛʁ]), better known as his stage name Tom Snare, is a French DJ and record producer from Dunkirk. Tom Snare rose to fame with a hit single, "Philosophy", with reached #2 in France in early 2006 and is now on the playlist of world famous DJs and bands such as Robbie Rivera, Global Deejays and Hi_Tack. Tom Snare have also released singles under other aliases, such as Blue Star, Pure Star, Master Of Sciences and Undertalk. Tom Snare's first album, Tom Snare's World, was released in October 2006.
 ```
