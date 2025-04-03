@@ -36,8 +36,20 @@ def get_summary(title):
         'redirects': '',
         'titles': title
     }
-    return fetch_wiki_data(params)['extract']
+    summary = fetch_wiki_data(params)['extract']
 
+    return summary
+
+def get_page_url(title):
+    """Returns the full Wikipedia url for a given title."""
+    params = {
+        'prop': 'info',
+        'inprop': 'url',
+        'titles': title
+    }
+    url = fetch_wiki_data(params)['fullurl']
+
+    return url
 
 def get_disambiguation_list(title):
     """
