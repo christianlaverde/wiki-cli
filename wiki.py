@@ -4,9 +4,26 @@ import argparse
 import requests
 import re
 
+# --- Exceptions ---
 class PageNotFoundError(Exception):
     pass
 
+# --- Wikipedia API Utilities
+def fetch_wiki_data(params):
+    """Make a request to the Wikipedia API and return the result."""
+    WIKI_API_ENDPOINT = 'https://en.wikipedia.org/w/api.php'
+    default_params = {'action': 'query', 'format': 'json'}
+    params.update(default_params)
+    response = requests.get(WIKI_API_ENDPOINT, params=params).json()
+
+    pages = response['query']['pages']
+    pageid = next(iter(pages.keys()))
+    page = pages[pageid]
+
+    if pageid == '-1':
+        raise PageNotFoundError
+    
+    return page
 
 def get_wiki_summary(title):
     """
@@ -19,7 +36,7 @@ def get_wiki_summary(title):
         'redirects': '',
         'titles': title
     }
-    result  = get_result(params)
+    result  = fetch_wiki_data(params)
 
     summary = result['extract']
     return summary
@@ -34,7 +51,7 @@ def get_disambiguation_title_list(title):
         'titles': '{} (disambiguation)'.format(title),
         'prop': 'links'
     }
-    result  = get_result(params)
+    result  = fetch_wiki_data(params)
 
     titles = [link['title'] for link in result['links'] if link['ns'] == 0]
     return titles
@@ -61,24 +78,10 @@ def get_page_url(title):
         'inprop': 'url',
         'titles': title
     }
-    result  = get_result(params)
+    result  = fetch_wiki_data(params)
 
     url = result['fullurl']
     return url
-
-def get_result(params):
-    API_ENDPOINT = 'https://en.wikipedia.org/w/api.php'
-    default_params = {'action': 'query', 'format': 'json'}
-    params.update(default_params)
-    result = requests.get(API_ENDPOINT, params=params).json()
-    result = result['query']['pages']
-    pageid = next(iter(result.keys()))
-    result = result[pageid]
-
-    if pageid == '-1':
-        raise PageNotFoundError
-    
-    return result
 
 def createParser():
     parser = argparse.ArgumentParser(
