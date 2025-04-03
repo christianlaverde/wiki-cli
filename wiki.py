@@ -62,7 +62,12 @@ def get_disambiguation_list(title):
         'titles': '{} (disambiguation)'.format(title),
         'prop': 'links'
     }
-    links = fetch_wiki_data(params)['links']
+    page = fetch_wiki_data(params)
+    links = page.get('links', [])
+
+    if not links:
+        raise DisambiguationNotFoundError(f'No disambiguations found for: "{title}"')
+
     titles = [link['title'] for link in links if link['ns'] == 0]
 
     return titles
